@@ -385,145 +385,129 @@ Each session has a unique cookie object accompany it. This allows you to alter t
 Cookie.maxAge
 Alternatively req.session.cookie.maxAge will return the time remaining in milliseconds, which we may also re-assign a new value to adjust the .expires property appropriately. The following are essentially equivalent
 
+**另外req.session.cookie。maxAge将返回剩余时间以毫秒为单位,我们也可以重新指定一个新值调整。到期后适当的属性。以下是本质上是等价的**
+
+
+
+```
 var hour = 3600000
 req.session.cookie.expires = new Date(Date.now() + hour)
 req.session.cookie.maxAge = hour
+```
+
 For example when maxAge is set to 60000 (one minute), and 30 seconds has elapsed it will return 30000 until the current request has completed, at which time req.session.touch() is called to reset req.session.maxAge to its original value.
+
+**例如当maxAge设置为60000(一分钟),30秒之后它将返回30000年到当前请求已经完成,届时req.session.touch重置req.session()。maxAge其原始值。**
 
 req.session.cookie.maxAge // => 30000 
 req.sessionID
 To get the ID of the loaded session, access the request property req.sessionID. This is simply a read-only value set when a session is loaded/created.
 
+**装载会话的ID,req.sessionID访问请求的属性。这只是一个只读值集,当加载/创建一个会话。**
+
 Session Store Implementation
 
 Every session store must be an EventEmitter and implement specific methods. The following methods are the list of required, recommended, and optional.
 
+**每一个会话存储必须是EventEmitter和实现具体方法。以下方法所需的列表,建议,和可选的。**
+
 Required methods are ones that this module will always call on the store.
+
+**需要方法,该模块将总是呼吁商店。**
+
 Recommended methods are ones that this module will call on the store if available.
 Optional methods are ones this module does not call at all, but helps present uniform stores to users.
 For an example implementation view the connect-redis repo.
 
+**推荐的方法是这个模块将调用存储如果可用。
+可选的方法是这个模块的不叫,但有助于统一存储用户。
+例如实现查看connect-redis回购。**
+
+
+```
 store.all(callback)
+```
+
 Optional
 
 This optional method is used to get all sessions in the store as an array. The callback should be called as callback(error, sessions).
 
+**这个可选的方法是用来获取所有会话中存储为一个数组。回调应称为回调(错误,会话)。**
+
+
+```
 store.destroy(sid, callback)
+```
+
 Required
 
 This required method is used to destroy/delete a session from the store given a session ID (sid). The callback should be called as callback(error) once the session is destroyed.
+
+**这需要方法用于摧毁/删除会话从商店会话ID(sid)。回调应称为回调(错误)一次会话被摧毁。**
 
 store.clear(callback)
 Optional
 
 This optional method is used to delete all sessions from the store. The callback should be called as callback(error) once the store is cleared.
 
+**这个可选的方法是用于从存储中删除所有会话。回调应称为回调(错误)一旦储存清除。**
+
 store.length(callback)
 Optional
 
 This optional method is used to get the count of all sessions in the store. The callback should be called as callback(error, len).
+
+**这个可选的方法是用来获取所有会话的计数。回调应称为回调(错误,len)。**
 
 store.get(sid, callback)
 Required
 
 This required method is used to get a session from the store given a session ID (sid). The callback should be called as callback(error, session).
 
+**这需要方法用于获取一个会话从商店会话ID(sid)。回调应称为回调(错误,会话)。**
+
 The session argument should be a session if found, otherwise null or undefined if the session was not found (and there was no error). A special case is made when error.code === 'ENOENT' to act like callback(null, null).
 
+**会话参数应该是一个会话如果找到,否则null或未定义如果会话不存在(没有错误)。一种特殊情况是当错误。代码= = = ' ENOENT '像回调(null,null)。**
+
+
+```
 store.set(sid, session, callback)
+```
+
 Required
 
 This required method is used to upsert a session into the store given a session ID (sid) and session (session) object. The callback should be called as callback(error) once the session has been set in the store.
 
+**这需要方法用于插入一个会话进商店给定一个会话ID(sid)和会话(session)对象。回调应称为回调(错误)一旦会话设置。**
+
+
+```
 store.touch(sid, session, callback)
+```
+
 Recommended
 
 This recommended method is used to "touch" a given session given a session ID (sid) and session (session) object. The callback should be called as callback(error) once the session has been touched.
 
+**这个推荐的方法用于给定会话“触摸”给定一个会话ID(sid)和会话(session)对象。回调应称为回调(错误)一旦会话被感动了。**
+
 This is primarily used when the store will automatically delete idle sessions and this method is used to signal to the store the given session is active, potentially resetting the idle timer.
+
+**这主要是用于存储将自动删除空闲会话和该方法用于信号存储给定的会话是活跃的,潜在的重置空闲计时器。**
 
 Compatible Session Stores
 
 The following modules implement a session store that is compatible with this module. Please make a PR to add additional modules :)
 
-★ aerospike-session-store A session store using Aerospike.
-
-★ cassandra-store An Apache Cassandra-based session store.
-
-★ cluster-store A wrapper for using in-process / embedded stores - such as SQLite (via knex), leveldb, files, or memory - with node cluster (desirable for Raspberry Pi 2 and other multi-core embedded devices).
-
-★ connect-azuretables An Azure Table Storage-based session store.
-
-★ connect-cloudant-store An IBM Cloudant-based session store.
-
-★ connect-couchbase A couchbase-based session store.
-
-★ connect-datacache An IBM Bluemix Data Cache-based session store.
-
-★ connect-db2 An IBM DB2-based session store built using ibm_db module.
-
-★ connect-dynamodb A DynamoDB-based session store.
-
-★ connect-loki A Loki.js-based session store.
-
-★ connect-ml A MarkLogic Server-based session store.
-
-★ connect-mssql A SQL Server-based session store.
-
-★ connect-monetdb A MonetDB-based session store.
-
-★ connect-mongo A MongoDB-based session store.
-
-★ connect-mongodb-session Lightweight MongoDB-based session store built and maintained by MongoDB.
-
-★ connect-pg-simple A PostgreSQL-based session store.
-
-★ connect-redis A Redis-based session store.
-
-★ connect-memcached A memcached-based session store.
-
-★ connect-session-knex A session store using Knex.js, which is a SQL query builder for PostgreSQL, MySQL, MariaDB, SQLite3, and Oracle.
-
-★ connect-session-sequelize A session store using Sequelize.js, which is a Node.js / io.js ORM for PostgreSQL, MySQL, SQLite and MSSQL.
-
-★ express-mysql-session A session store using native MySQL via the node-mysql module.
-
-★ express-oracle-session A session store using native oracle via the node-oracledb module.
-
-★ express-sessions: A session store supporting both MongoDB and Redis.
-
-★ connect-sqlite3 A SQLite3 session store modeled after the TJ's connect-redis store.
-
-★ documentdb-session A session store for Microsoft Azure's DocumentDB NoSQL database service.
-
-★ express-nedb-session A NeDB-based session store.
-
-★ express-session-level A LevelDB based session store.
-
-★ express-etcd An etcd based session store.
-
-★ fortune-session A Fortune.js based session store. Supports all backends supported by Fortune (MongoDB, Redis, Postgres, NeDB).
-
-★ hazelcast-store A Hazelcast-based session store built on the Hazelcast Node Client.
-
-★ level-session-store A LevelDB-based session store.
-
-★ medea-session-store A Medea-based session store.
-
-★ mssql-session-store A SQL Server-based session store.
-
-★ nedb-session-store An alternate NeDB-based (either in-memory or file-persisted) session store.
-
-★ sequelstore-connect A session store using Sequelize.js.
-
-★ session-file-store A file system-based session store.
-
-★ session-rethinkdb A RethinkDB-based session store.
+以下模块实现一个会话存储兼容这个模块。请公关添加额外的模块
 
 Example
 
 A simple example using express-session to store page views for a user.
 
+
+```
 var express = require('express')
 var parseurl = require('parseurl')
 var session = require('express-session')
@@ -559,65 +543,5 @@ app.get('/foo', function (req, res, next) {
 app.get('/bar', function (req, res, next) {
   res.send('you viewed this page ' + req.session.views['/bar'] + ' times')
 })
-License
-
-MIT
-
-We ♥ your boss
-Selectively mirror the npm registry inside your firewall. Filter packages based on security, licensing, code quality and more. Build awesome stuff faster. Try npm Enterprise for free…
-
-
-npm install express-session
-how? learn more
-
- dougwilson dougwilson published 4 weeks ago
-1.15.2 is the latest of 52 releases
-github.com/expressjs/session
-MIT  Licensed on OSI-approved terms®
-Collaborators list
-defunctzombie
-dougwilson
-mscdex
-Stats
-80,221 downloads in the last day
-446,223 downloads in the last week
-1,894,335 downloads in the last month
-34 open issues on GitHub
-17 open pull requests on GitHub
-Try it out
-Test express-session in your browser.
-Keywords
-None
-
-Dependencies (9)
-cookie, cookie-signature, crc, debug, depd, on-headers, parseurl, uid-safe, utils-merge
-
-Dependents (1576)
-betspots, sdk-snips-ai, fx-middleware, jxappsrvr, ngnode, goose-session, roadiejs-api, pk-app-webgui-aria2, zetta-app, snx-middleware, clever-auth, maki-passport-local, scio, powerstone, azquestion.com, pk-app-fbgui-aria2, omni.cm, generaljs, taller-abm, radiatus-providers, number_game, irc-bnc, sycle-gateway, tome, express-boobst, noful, saber-storage, crud-middleware, m2m-supervisor, nopar, baucis-decorators-example, wxchangba, makingmobile, elastic-transfer, sublime-application, neyka, reacta-service-express, nimbleservice, super-bootstrap, mockcenter, latentflip-vorlon, tumojs, timetracker, powerjs, nodeplayer-plugin-passport, super-server, pe-n-starter, nej-webserver, weather-forecast-application, pump.io-client-app, and more
-
-Voxer is hiring. View more…
-You Need Help
-
-Documentation
-Support / Contact Us
-Registry Status
-Website Issues
-CLI Issues
-Security
-About npm
-
-About npm, Inc
-Jobs
-npm Weekly
-Blog
-Twitter
-GitHub
-Legal Stuff
-
-Terms of Use
-Code of Conduct
-Package Name Disputes
-Privacy Policy
-Reporting Abuse
-Other policies
-npm loves you
+```
+License MIT
