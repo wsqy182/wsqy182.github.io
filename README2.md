@@ -40,52 +40,99 @@ express-session accepts these properties in the options object.
  
 **express-session接受这些属性的选择对象。**
 
-cookie
+##### **cookie**
 Settings object for the session ID cookie. The default value is { path: '/', httpOnly: true, secure: false, maxAge: null }.
+ 
+**设置对象的cookie会话ID 。默认值为{路径:'/',httpOnly:true,secure:false,maxAge:null}。**
 
 The following are options that can be set in this object.
+ 
+**以下是选项,可以设置在这个对象中。**
 
-cookie.domain
+###### cookie.domain
 Specifies the value for the Domain Set-Cookie attribute. By default, no domain is set, and most clients will consider the cookie to apply to only the current domain.
+ 
+**指定域SetCookkie属性的值.默认情况下,没有域.绝大多数的客户端都会考虑把cookie适用于当前域.**
 
-cookie.expires
+###### cookie.expires
 Specifies the Date object to be the value for the Expires Set-Cookie attribute. By default, no expiration is set, and most clients will consider this a "non-persistent cookie" and will delete it on a condition like exiting a web browser application.
+ 
+**指定cookie的有效期,默认情况下,该值为空,绝大多数的客户端都考虑'非持久cookie',并且会通过删除这个cooke来完成退出登录的操作.**
 
-Note If both expires and maxAge are set in the options, then the last one defined in the object is what is used.
+==Note== If both expires and maxAge are set in the options, then the last one defined in the object is what is used.
+ 
+**如果有效期和最大有效市场都设置,则只有最后一个定义的属性生效**
 
-Note The expires option should not be set directly; instead only use the maxAge option.
+==Note== The expires option should not be set directly; instead only use the maxAge option.
+ 
+**到期选项不应该直接设置;而不是只使用maxAge选项。**
 
 cookie.httpOnly
 Specifies the boolean value for the HttpOnly Set-Cookie attribute. When truthy, the HttpOnly attribute is set, otherwise it is not. By default, the HttpOnly attribute is set.
+ 
+**指定的布尔值HttpOnly set - cookie属性。为真,设置HttpOnly属性。默认情况下,HttpOnly属性设置。**
 
-Note be careful when setting this to true, as compliant clients will not allow client-side JavaScript to see the cookie in document.cookie.
+==Note== be careful when setting this to true, as compliant clients will not allow client-side JavaScript to see the cookie in document.cookie.
+
+ **注意:设置为true时要小心,比如兼容的客户是否允许客户端JavaScript看到document.cookie **
+
 
 cookie.maxAge
 Specifies the number (in milliseconds) to use when calculating the Expires Set-Cookie attribute. This is done by taking the current server time and adding maxAge milliseconds to the value to calculate an Expires datetime. By default, no maximum age is set.
+ 
+**指定一个数(以毫秒为单位)计算到期时使用set - cookie属性。这是通过将当前服务器时间和增加maxAge毫秒值来计算一个datetime到期。默认情况下,没有设置最大年龄。**
 
-Note If both expires and maxAge are set in the options, then the last one defined in the object is what is used.
+==Note== If both expires and maxAge are set in the options, then the last one defined in the object is what is used.
+ 
+**如果有效期和最大有效市场都设置,则只有最后一个定义的属性生效**
 
 cookie.path
 Specifies the value for the Path Set-Cookie. By default, this is set to '/', which is the root path of the domain.
+ 
+**为cook的指定路径set - cookie的值。默认情况下,这个设置为'/',这是当前域的根路径。**
 
 cookie.sameSite
 Specifies the boolean or string to be the value for the SameSite Set-Cookie attribute.
 
+**指定的布尔或字符串的值SameSite set - cookie属性**。
+
 true will set the SameSite attribute to Strict for strict same site enforcement.
+
+**为真,会将SameSite属性为同一站点执行严格。**
+
 false will not set the SameSite attribute.
 'lax' will set the SameSite attribute to Lax for lax same site enforcement.
+
+**错误不会设置SameSite属性。
+“宽松”将SameSite属性为同一站点宽松执法松懈。**
+
 'strict' will set the SameSite attribute to Strict for strict same site enforcement.
+
+**“严格”将SameSite属性为同一站点严格执行严格的。**
+
 More information about the different enforcement levels can be found in the specification https://tools.ietf.org/html/draft-west-first-party-cookies-07#section-4.1.1
 
-Note This is an attribute that has not yet been fully standardized, and may change in the future. This also means many clients may ignore this attribute until they understand it.
+**更多信息可以在不同的执法水平规范https://tools.ietf.org/html/draft-west-first-party-cookies-07 section-4.1.1**
+
+==Note== This is an attribute that has not yet been fully standardized, and may change in the future. This also means many clients may ignore this attribute until they understand it.
+
+**请注意这是一个属性,还没有完全标准化,并在未来可能会改变。这也意味着许多客户可以忽略该属性,直到他们理解它。**
 
 cookie.secure
 Specifies the boolean value for the Secure Set-Cookie attribute. When truthy, the Secure attribute is set, otherwise it is not. By default, the Secure attribute is not set.
 
+**为安全set - cookie属性指定的布尔值。当真相,安全属性设置,否则不是。默认情况下,没有设置安全属性。**
+
 Note be careful when setting this to true, as compliant clients will not send the cookie back to the server in the future if the browser does not have an HTTPS connection.
+
+**注意小心当设置为true,兼容客户不会发送cookie回服务器在未来如果浏览器没有HTTPS连接。**
 
 Please note that secure: true is a recommended option. However, it requires an https-enabled website, i.e., HTTPS is necessary for secure cookies. If secure is set, and you access your site over HTTP, the cookie will not be set. If you have your node.js behind a proxy and are using secure: true, you need to set "trust proxy" in express:
 
+**请注意安全:真的是推荐的选项。然而,它需要一个https-enabled网站,即。,HTTPS安全cookie是必要的。如果设置了安全,你通过HTTP访问你的网站,饼干不会设置。如果你的节点。js在代理和使用安全:真的,您需要设置“信任代理”在表达:**
+
+
+```
 var app = express()
 app.set('trust proxy', 1) // trust first proxy 
 app.use(session({
@@ -108,75 +155,143 @@ if (app.get('env') === 'production') {
 }
  
 app.use(session(sess))
+```
+
 The cookie.secure option can also be set to the special value 'auto' to have this setting automatically match the determined security of the connection. Be careful when using this setting if the site is available both as HTTP and HTTPS, as once the cookie is set on HTTPS, it will no longer be visible over HTTP. This is useful when the Express "trust proxy" setting is properly setup to simplify development vs production configuration.
+
+**饼干。安全选项也可以被设置为一个特殊的值“汽车”这个设置自动匹配确定安全的连接。小心使用此设置时如果网站有两个HTTP和HTTPS,一旦饼干在HTTPS,它通过HTTP将不再可见。这是有用的表达“信任代理”设置时正确地设置来简化开发和生产配置。**
 
 genid
 Function to call to generate a new session ID. Provide a function that returns a string that will be used as a session ID. The function is given req as the first argument if you want to use some value attached to req when generating the ID.
 
+**函数调用生成一个新的会话ID。提供一个函数,它返回一个字符串,该字符串将被用作一个会话ID。要求给出的函数是作为第一个参数,如果你想使用一些值附加到请求时生成的ID。**
+
 The default value is a function which uses the uid-safe library to generate IDs.
+
+**默认值是一个函数,使用uid-safe库生成id。**
 
 NOTE be careful to generate unique IDs so your sessions do not conflict.
 
+**注意小心生成惟一的id,以便您的会话不冲突。**
+
+
+```
 app.use(session({
   genid: function(req) {
     return genuuid() // use UUIDs for session IDs 
   },
   secret: 'keyboard cat'
 }))
+```
+
 name
 The name of the session ID cookie to set in the response (and read from in the request).
 
+**会话ID cookie的名称设置在响应(以及从请求中读取)。**
+
 The default value is 'connect.sid'.
 
+**默认值是“connect.sid”。**
+
 Note if you have multiple apps running on the same hostname (this is just the name, i.e. localhost or 127.0.0.1; different schemes and ports do not name a different hostname), then you need to separate the session cookies from each other. The simplest method is to simply set different names per app.
+
+**注意如果您有多个应用程序运行在同一主机名(这只是一个名字,即localhost或127.0.0.1;不同的方案和港口不名称不同的主机名),那么您需要互相独立的会话cookie。最简单的方法是为每个应用程序简单地设置不同的名称。**
 
 proxy
 Trust the reverse proxy when setting secure cookies (via the "X-Forwarded-Proto" header).
 
+**信任时,反向代理设置安全cookie(通过“X-Forwarded-Proto”头)。**
+
 The default value is undefined.
+
+**默认值是未定义的。**
+
 
 true The "X-Forwarded-Proto" header will be used.
 false All headers are ignored and the connection is considered secure only if there is a direct TLS/SSL connection.
+
+**真正的“X-Forwarded-Proto”将使用标题。
+假头被忽略和连接被认为是安全的只有直接TLS / SSL连接。**
+
 undefined Uses the "trust proxy" setting from express
+
+**未定义的使用表达的“信任代理”设置**
+
 resave
 Forces the session to be saved back to the session store, even if the session was never modified during the request. Depending on your store this may be necessary, but it can also create race conditions where a client makes two parallel requests to your server and changes made to the session in one request may get overwritten when the other request ends, even if it made no changes (this behavior also depends on what store you're using).
 
+**部队会话保存会话存储,即使会话期间从来没有修改请求。取决于你的商店这可能是必要的,但它也可以创建竞态条件,客户让两个并行请求您的服务器,在一个请求中更改会话可能会覆盖另一个请求结束时,即使它没有改变(这种行为也取决于存储你使用)。**
+
 The default value is true, but using the default has been deprecated, as the default will change in the future. Please research into this setting and choose what is appropriate to your use-case. Typically, you'll want false.
 
+**默认值是正确的,但使用默认已经弃用,作为默认在未来将会改变。请研究这个设置,选择适合您的用例。通常情况下,你需要的是假的。**
+
 How do I know if this is necessary for my store? The best way to know is to check with your store if it implements the touch method. If it does, then you can safely set resave: false. If it does not implement the touch method and your store sets an expiration date on stored sessions, then you likely need resave: true.
+
+**我怎么知道这是必要的,为我的商店?知道最好的办法是检查与你的商店如果它实现了联系方法。如果是这样,那么您可以安全地重新保存:假的。如果它没有实现触摸的方法和你的商店设置过期日期存储会话,那么你可能需要重新保存:真的。**
 
 rolling
 Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown.
 
+**迫使cookie会话标识符被设置在每一个响应。重置到原始maxAge到期,到期重新设置倒计时。**
+
 The default value is false.
 
+**默认值是错误的。**
+
 Note When this option is set to true but the saveUninitialized option is set to false, the cookie will not be set on a response with an uninitialized session.
+
+**注意此选项设置为true时但saveUninitialized选项设置为false,饼干不会响应与未初始化会话。**
 
 saveUninitialized
 Forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified. Choosing false is useful for implementing login sessions, reducing server storage usage, or complying with laws that require permission before setting a cookie. Choosing false will also help with race conditions where a client makes multiple parallel requests without a session.
 
+**部队一个会话是“未初始化”保存到存储。一个会话是未初始化的时候是新的但不修改。选择错误的是有用的实现登录会话,减少服务器存储使用,或遵守法律,要求许可之前设置一个cookie。选择错误与竞态条件,客户也将有助于使没有会话的多个并行请求。**
+
 The default value is true, but using the default has been deprecated, as the default will change in the future. Please research into this setting and choose what is appropriate to your use-case.
 
+**默认值是正确的,但使用默认已经弃用,作为默认在未来将会改变。请研究这个设置,选择适合您的用例。**
+
 Note if you are using Session in conjunction with PassportJS, Passport will add an empty Passport object to the session for use after a user is authenticated, which will be treated as a modification to the session, causing it to be saved. This has been fixed in PassportJS 0.3.0
+
+**注意如果您使用会话与PassportJS,护照将一个空的护照对象添加到会话用于用户身份验证后,将被视为修改会话,导致它被保存。这是固定在PassportJS 0.3.0**
 
 secret
 Required option
 
 This is the secret used to sign the session ID cookie. This can be either a string for a single secret, or an array of multiple secrets. If an array of secrets is provided, only the first element will be used to sign the session ID cookie, while all the elements will be considered when verifying the signature in requests.
 
+**这是秘密签署使用会话ID cookie。这可以是一个字符串为一个秘密,或多个秘密的数组。如果提供的秘密是一个数组,只有第一个元素将用于签署会话ID cookie,而所有元素将被认为是在验证签名的请求。**
+
 store
 The session store instance, defaults to a new MemoryStore instance.
+
+**会话存储实例,默认为一个新的MemoryStore实例。**
 
 unset
 Control the result of unsetting req.session (through delete, setting to null, etc.).
 
+**需要控制的结果进行调用。会话(通过删除、设置为null,等等)。**
+
 The default value is 'keep'.
 
+**默认值是“保持”。**
+
 'destroy' The session will be destroyed (deleted) when the response ends.
+
+**“摧毁”会话将被摧毁的反应结束的时候(删除)。**
+
 'keep' The session in the store will be kept, but modifications made during the request are ignored and not saved.
+
+**“保持”会话将一直在店里,但是修改请求被忽略和未得救。**
+
 req.session
 To store or access session data, simply use the request property req.session, which is (generally) serialized as JSON by the store, so nested objects are typically fine. For example below is a user-specific view counter:
 
+**存储或访问会话数据,只需使用请求属性要求。会话,(通常)存储序列化为JSON,因此嵌套对象通常很好。例如下面是一个特定于用户的观点反驳:**
+
+
+```
 // Use the session middleware 
 app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
  
@@ -194,42 +309,78 @@ app.get('/', function(req, res, next) {
     res.end('welcome to the session demo. refresh!')
   }
 })
+```
+
 Session.regenerate(callback)
 To regenerate the session simply invoke the method. Once complete, a new SID and Session instance will be initialized at req.session and the callback will be invoked.
 
+**重新生成会话简单地调用该方法。一旦完成,一个新的SID,在点播会话实例将被初始化。会话和要调用的回调。**
+
+
+```
 req.session.regenerate(function(err) {
   // will have a new session here 
 })
+```
+
 Session.destroy(callback)
 Destroys the session and will unset the req.session property. Once complete, the callback will be invoked.
 
+**破坏会话并将设置要求。会话属性。一旦完成,将调用回调。**
+
+
+```
 req.session.destroy(function(err) {
   // cannot access session here 
 })
+```
+
 Session.reload(callback)
 Reloads the session data from the store and re-populates the req.session object. Once complete, the callback will be invoked.
 
+**重新加载的会话数据存储和重新填充点播。会话对象。一旦完成,将调用回调。**
+
+
+```
 req.session.reload(function(err) {
   // session updated 
 })
+```
+
 Session.save(callback)
 Save the session back to the store, replacing the contents on the store with the contents in memory (though a store may do something else--consult the store's documentation for exact behavior).
 
+**保存会话回商店,替换内容与内容存储在内存中(尽管商店可能做其他的事情——咨询具体行为)的存储的文档。**
+
 This method is automatically called at the end of the HTTP response if the session data has been altered (though this behavior can be altered with various options in the middleware constructor). Because of this, typically this method does not need to be called.
+
+**调用这个方法是自动的HTTP响应如果会话数据已经改变了(尽管这种行为可以改变各种选项的中间件构造函数)。因此,通常不需要调用这个方法。**
 
 There are some cases where it is useful to call this method, for example, long- lived requests or in WebSockets.
 
+**有一些情况下,调用这个方法是很有用的,例如,长期居住或WebSockets请求。**
+
+
+```
 req.session.save(function(err) {
   // session saved 
 })
+```
+
 Session.touch()
 Updates the .maxAge property. Typically this is not necessary to call, as the session middleware does this for you.
+
+**更新。maxAge财产。通常这没有必要调用,因为会话中间件这是否适合你。**
 
 req.session.id
 Each session has a unique ID associated with it. This property will contain the session ID and cannot be modified.
 
+**每个会话都有一个与之关联的惟一ID。这个属性将包含会话ID,不能修改。**
+
 req.session.cookie
 Each session has a unique cookie object accompany it. This allows you to alter the session cookie per visitor. For example we can set req.session.cookie.expires to false to enable the cookie to remain for only the duration of the user-agent.
+
+**每个会话都有一个独特的cookie对象陪它。这允许您更改每个访问者的会话cookie。例如,我们可以设置req.session.cookie。到期为false,使饼干保持用户代理的持续时间。**
 
 Cookie.maxAge
 Alternatively req.session.cookie.maxAge will return the time remaining in milliseconds, which we may also re-assign a new value to adjust the .expires property appropriately. The following are essentially equivalent
