@@ -7,39 +7,17 @@ This is a Node.js module available through the npm registry. Installation is don
 ----------------------------------------------------------------------------------------------------------------
 ## API
 <pre><code>var session = require('express-session')</pre></code>
-
-()You can use the [editor on GitHub](https://github.com/wsqy182/wsqy182.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/wsqy182/wsqy182.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+session(options)
+Create a session middleware with the given options.
+使用给定的选项创建一个会话中间件
+Note Session data is not saved in the cookie itself, just the session ID. Session data is stored server-side.
+注意:会话数据不是保存在他自己的cookie当中,cookie当中仅有一个session ID,会话数据是存储于服务端.
+Note Since version 1.5.0, the cookie-parser middleware no longer needs to be used for this module to work. This module now directly reads and writes cookies on req/res. Using cookie-parser may result in issues if the secret is not the same between this module and cookie-parser.
+注意:自版本1.5.0以后,这个模块在使用的使用不再需要使用cookie-parser中间件。现在这个模块直接在req/res的时候读取和写入cookie。如果当前模块和cookie-parser之间的加密是不一样的,使用cookie-parser可能导致问题.
+Warning The default server-side session storage, MemoryStore, is purposely not designed for a production environment. It will leak memory under most conditions, does not scale past a single process, and is meant for debugging and developing.
+警告:默认服务器端会话存储,内存存储,故意不用于生产环境。在大多数情况下它会泄漏内存,不存在缩小部分在一个单线程,用于调试和开发。
+For a list of stores, see compatible session stores.
+关于这个存储的列表,请参阅会话存储兼容.
+Options
+express-session accepts these properties in the options object.
+express-session接受这些属性的选择对象。
